@@ -224,14 +224,26 @@ var appController = (function (budgetCtrl, UICtrl) {
     UICtrl.displayBudget(budget)
   }
 
+  var updatePercentages = function() {
+
+    // 1. Calculate percentages
+
+    
+    // 2. Read percentages from the budget controller
+
+
+    // 3. Update the UI with the new percentages
+
+  }
+
   var ctrlAddItem = function () {
     var input, newItem
 
     //1. Get the filed input data
     input = UIController.getInput()
 
+    // 2. Add the item to the budget controller
     if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
-      // 2. Add the item to the budget controller
       newItem = budgetController.addItem(
         input.type,
         input.description,
@@ -246,6 +258,9 @@ var appController = (function (budgetCtrl, UICtrl) {
 
       // 5. Calculate and update the budget
       updateBudget()
+      
+      // 6. Calculate and update percentages
+      updatePercentages()
     }
   }
 
@@ -269,6 +284,9 @@ var appController = (function (budgetCtrl, UICtrl) {
 
       // 3. Update and show the new budget
       updateBudget()
+
+      // 4. Calculate and update percentages
+      updatePercentages()
 
     }
 
