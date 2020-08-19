@@ -142,7 +142,7 @@ var UIController = (function () {
     percentageLabel: ".budget__expenses--percentage",
     container: ".container",
     expensesPercLabel: ".item__percentage",
-    dateLabel: ".budget__title--month"
+    dateLabel: ".budget__title--month",
   }
 
   var formatNumber = function (num, type) {
@@ -159,16 +159,22 @@ var UIController = (function () {
     // 1. Convert num to a string and...
     // 2. splits this string(num) into 2 and...
     // 3. store both in array called numSplit
-    numSplit = num.split('.');
-    
+    numSplit = num.split(".")
+
     // array 1 --- convert back to Int and...
     // 2. separate per 3 digits with a comma normally using .toLocaleString() method
-    int = parseInt(numSplit[0]).toLocaleString();
- 
+    int = parseInt(numSplit[0]).toLocaleString()
+
     // array 2 -- store decimal value
-    dec = numSplit[1];
- 
-    return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
+    dec = numSplit[1]
+
+    return (type === "exp" ? "-" : "+") + " " + int + "." + dec
+  }
+
+  var nodeListForEach = function (list, callback) {
+    for (var i = 0; i < list.length; i++) {
+      callback(list[i], i)
+    }
   }
 
   return {
@@ -230,12 +236,19 @@ var UIController = (function () {
 
     displayBudget: function (obj) {
       var type
-      obj.budget > 0 ? type = 'inc' : type = 'exp'
+      obj.budget >= 0 ? (type = "inc") : (type = "exp")
 
-      document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.budget, type)
-      document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc')
-      document.querySelector(DOMstrings.expensesLabel).textContent =
-      formatNumber(obj.totalExp, 'exp')
+      document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(
+        obj.budget,
+        type
+      )
+      document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(
+        obj.totalInc,
+        "inc"
+      )
+      document.querySelector(
+        DOMstrings.expensesLabel
+      ).textContent = formatNumber(obj.totalExp, "exp")
       document.querySelector(DOMstrings.percentageLabel).textContent =
         obj.percentage
 
@@ -250,12 +263,6 @@ var UIController = (function () {
     displayPercentages: function (percentages) {
       var fields = document.querySelectorAll(DOMstrings.expensesPercLabel)
 
-      var nodeListForEach = function (list, callback) {
-        for (var i = 0; i < list.length; i++) {
-          callback(list[i], i)
-        }
-      }
-
       nodeListForEach(fields, function (current, index) {
         if (percentages[index] > 0) {
           current.textContent = percentages[index] + "%"
@@ -265,16 +272,45 @@ var UIController = (function () {
       })
     },
 
-    displayMonth: function() {
+    displayMonth: function () {
       var now, year, month, months
       now = new Date()
       // var christmas = new Date(2020, 11, 25)
-      months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ]
       month = now.getMonth()
 
       year = now.getFullYear()
-      document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year
+      document.querySelector(DOMstrings.dateLabel).textContent =
+        months[month] + " " + year
+    },
 
+    changedType: function () {
+      var fields = document.querySelectorAll(
+        DOMstrings.inputType +
+          "," +
+          DOMstrings.inputDescription +
+          "," +
+          DOMstrings.inputValue
+      )
+
+      nodeListForEach(fields, function (cur) {
+        cur.classList.toggle("red-focus")
+      })
+
+      document.querySelector(DOMstrings.inputBtn).classList.toggle('red')
     },
 
     getDOMstrings: function () {
@@ -298,6 +334,10 @@ var appController = (function (budgetCtrl, UICtrl) {
     document
       .querySelector(DOM.container)
       .addEventListener("click", ctrlDeleteItem)
+
+    document
+      .querySelector(DOM.inputType)
+      .addEventListener("change", UICtrl.changedType)
   }
 
   var updateBudget = function () {
