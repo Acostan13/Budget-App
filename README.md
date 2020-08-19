@@ -1,6 +1,6 @@
 # Budget App
 
-This is a budget app that that focuses on helping you manage your income and expenses
+This is a budget app that focuses on helping you manage your income and expenses
 
 ![main](/assets/main.JPG)
 
