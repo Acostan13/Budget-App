@@ -142,6 +142,7 @@ var UIController = (function () {
     percentageLabel: ".budget__expenses--percentage",
     container: ".container",
     expensesPercLabel: ".item__percentage",
+    dateLabel: ".budget__title--month"
   }
 
   var formatNumber = function (num, type) {
@@ -155,17 +156,19 @@ var UIController = (function () {
     num = Math.abs(num)
     num = num.toFixed(2)
 
-    numSplit = num.split(".")
-
-    int = numSplit[0]
-
-    if (int.length > 3) {
-      int = int.substr(0, int.length - 3) + "," + int.substr(int.length - 3, 3) // 2310 => 2,310
-    }
-
-    dec = numSplit[1]
-
-    return (type === "exp" ? "-" : "+") + " " + int + '.' + dec
+    // 1. Convert num to a string and...
+    // 2. splits this string(num) into 2 and...
+    // 3. store both in array called numSplit
+    numSplit = num.split('.');
+    
+    // array 1 --- convert back to Int and...
+    // 2. separate per 3 digits with a comma normally using .toLocaleString() method
+    int = parseInt(numSplit[0]).toLocaleString();
+ 
+    // array 2 -- store decimal value
+    dec = numSplit[1];
+ 
+    return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
   }
 
   return {
@@ -260,6 +263,18 @@ var UIController = (function () {
           current.textContent = "---"
         }
       })
+    },
+
+    displayMonth: function() {
+      var now, year, month, months
+      now = new Date()
+      // var christmas = new Date(2020, 11, 25)
+      months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      month = now.getMonth()
+
+      year = now.getFullYear()
+      document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year
+
     },
 
     getDOMstrings: function () {
@@ -363,6 +378,7 @@ var appController = (function (budgetCtrl, UICtrl) {
   return {
     init: function () {
       console.log("Application has started")
+      UICtrl.displayMonth()
       UICtrl.displayBudget({
         budget: 0,
         totalInc: 0,
